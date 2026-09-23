@@ -14,5 +14,6 @@ The page shows the minimum print width for each code. For posters read from abou
 
 - Everything runs in the browser. Links are not sent anywhere.
 - Codes use error correction level H, so the centre mark does not affect scanning.
+- Links are limited to 150 characters. Longer links make codes too dense to scan reliably.
 - The QR library ([qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator), MIT licence) loads from jsDelivr.
 - The BCDSS logo embedded in `index.html` belongs to BCDSS and the University of Bonn and is not licensed for reuse outside BCDSS communications.
