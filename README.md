@@ -16,5 +16,3 @@ The page shows the minimum print width for each code. For posters read from abou
 - Codes use error correction level H, so the centre mark does not affect scanning.
 - The QR library ([qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator), MIT licence) loads from jsDelivr.
 - The BCDSS logo embedded in `index.html` belongs to BCDSS and the University of Bonn and is not licensed for reuse outside BCDSS communications.
-
-Contact: BCDSS Press and PR, pr@dependency.uni-bonn.de
