@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BCDSS poster QR codes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<style>
+:root {
+  --blue: #07529A; --yellow: #EAB90C; --grey: #909085;
+  --bg: #F3F5F8; --surface: #FFFFFF; --text: #14263A; --muted: #5E6470; --line: #D6DCE4;
+  --field: #FFFFFF; --accent: var(--blue);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1C2E; --surface: #13263B; --text: #E8EDF3; --muted: #A3ACB8; --line: #2A4058;
+    --field: #0F2033; --accent: #6FA8E0;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1C2E; --surface: #13263B; --text: #E8EDF3; --muted: #A3ACB8; --line: #2A4058;
+  --field: #0F2033; --accent: #6FA8E0;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 1rem/1.5 "Exo 2", "Segoe UI", Arial, sans-serif;
+}
+main {
+  max-width: 60rem; margin: 0 auto; padding: 2.5rem 1.25rem 3rem;
+  display: grid; gap: 2rem; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start;
+}
+header { grid-column: 1 / -1; border-left: 4px solid var(--yellow); padding-left: 1rem; }
+h1 { font-weight: 700; font-size: 1.75rem; line-height: 1.2; margin: 0 0 .35rem; color: var(--accent); }
+header p { margin: 0; color: var(--muted); max-width: 38rem; }
+.controls { display: grid; gap: 1.5rem; }
+label, legend { display: block; font-weight: 500; margin-bottom: .4rem; }
+input[type="url"] {
+  width: 100%; font: inherit; padding: .65rem .75rem; border-radius: 6px;
+  border: 1px solid var(--line); background: var(--field); color: var(--text);
+}
+fieldset { border: 0; margin: 0; padding: 0; }
+.choice { display: flex; gap: .5rem; align-items: center; margin: .3rem 0; font-weight: 400; }
+.hint { color: var(--muted); font-size: .9rem; margin: .4rem 0 0; }
+.error { color: #B3261E; font-size: .9rem; margin: .4rem 0 0; }
+:root[data-theme="dark"] .error { color: #FF8A80; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .error { color: #FF8A80; } }
+input[type="file"] { font: inherit; color: var(--muted); max-width: 100%; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+button {
+  font: 500 1rem "Exo 2", "Segoe UI", Arial, sans-serif; cursor: pointer;
+  padding: .6rem 1.1rem; border-radius: 6px; border: 1px solid var(--blue);
+  background: var(--blue); color: #fff;
+}
+button.secondary { background: transparent; color: var(--accent); border-color: var(--accent); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.preview {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem;
+}
+.tile { background: #fff; border-radius: 4px; }
+.tile > svg { display: block; width: 100%; height: auto; }
+.facts { margin: 1rem 0 0; color: var(--muted); font-size: .9rem; }
+.facts p { margin: .2rem 0; }
+.warn { color: var(--text); border-left: 3px solid var(--yellow); padding-left: .6rem; margin-top: .6rem !important; }
+@media (max-width: 44rem) {
+  main { grid-template-columns: 1fr; padding-top: 1.5rem; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Poster QR codes</h1>
+    <p>Paste the link for a poster to get a QR code in Uni Bonn blue with the BCDSS chain mark in the centre, ready for print.</p>
+  </header>
+
+  <section class="controls" aria-label="Settings">
+    <div>
+      <label for="url">Link</label>
+      <input id="url" type="url" inputmode="url" autocomplete="off" spellcheck="false"
+             value="https://linktr.ee/dependencybonn">
+      <p class="error" id="urlError" hidden>Enter a full link starting with https:// or http://.</p>
+    </div>
+
+    <fieldset>
+      <legend>Centre mark</legend>
+      <label class="choice"><input type="radio" name="mark" value="chain" checked> BCDSS chain mark</label>
+      <label class="choice"><input type="radio" name="mark" value="text"> BCDSS lettering</label>
+      <label class="choice"><input type="radio" name="mark" value="upload"> Another logo file</label>
+      <div id="uploadRow" hidden>
+        <input id="logo" type="file" accept="image/svg+xml,image/png,image/jpeg">
+        <p class="hint">Use a square version of the mark (SVG or PNG), not the wide Uni Bonn lockup. A transparent or white background works best.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Style</legend>
+      <label class="choice"><input type="radio" name="style" value="squares"> Classic squares</label>
+      <label class="choice"><input type="radio" name="style" value="soft"> Soft squares</label>
+      <label class="choice"><input type="radio" name="style" value="dots" checked> Dots</label>
+      <label class="choice"><input type="radio" name="style" value="fluid"> Fluid</label>
+      <label class="choice"><input type="radio" name="style" value="columns"> Columns</label>
+      <label class="choice"><input type="radio" name="style" value="links"> Links</label>
+      <p class="hint">Classic squares and Fluid are the most forgiving for small prints.</p>
+    </fieldset>
+
+    <div>
+      <div class="actions" id="actions">
+        <button id="saveSvg" type="button">Download SVG for print</button>
+        <button id="savePng" type="button" class="secondary">Download PNG</button>
+      </div>
+      <p class="hint" id="saveStatus" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="preview" aria-label="Preview">
+    <div class="tile" id="tile"></div>
+    <div class="facts">
+      <p id="sizeFact"></p>
+      <p>For posters read from about a metre away, aim for 10 cm or more.</p>
+      <p class="warn" id="densityWarn" hidden>This link makes a dense code. A shorter link (for example the Plone page without tracking parameters) will scan more reliably.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+// Builds the branded QR layout: module positions, finder squares,
+// and a cleared centre square for the BCDSS mark. Error correction H (about 30%).
+function buildLayout(qrcode, url, knock) {
+  const qr = qrcode(0, 'H');
+  qr.addData(url);
+  qr.make();
+  const n = qr.getModuleCount();
+  // Centre knockout: about 22% of the symbol width, same parity as n so it sits centred.
+  let k = Math.round(n * (knock || 0.22));
+  if (k % 2 !== n % 2) k += 1;
+  const c0 = (n - k) / 2;
+  const inFinder = (r, c) => (r < 7 && c < 7) || (r < 7 && c >= n - 7) || (r >= n - 7 && c < 7);
+  const inKnock = (r, c) => r >= c0 && r < c0 + k && c >= c0 && c < c0 + k;
+  const dots = [];
+  for (let r = 0; r < n; r++)
+    for (let c = 0; c < n; c++)
+      if (qr.isDark(r, c) && !inFinder(r, c) && !inKnock(r, c)) dots.push([r, c]);
+  return { n, k, c0, dots, finders: [[0, 0], [0, n - 7], [n - 7, 0]] };
+}
+
+// Module styles. Each draws one dark module at row r, column c; has(r, c) says
+// whether a neighbour is dark, so joined styles can bridge to it.
+// All shapes wind clockwise so overlaps stay filled under the nonzero rule.
+const STYLES = {
+  squares: { finder: 'sharp', mod: (r, c) => `M${c} ${r}h1v1h-1z` },
+  soft:    { finder: 'round', mod: (r, c) => rrect(c + .06, r + .06, .88, .88, .25) },
+  dots:    { finder: 'round', mod: (r, c) => circle(c + .5, r + .5, .46) },
+  fluid:   { finder: 'round', mod: (r, c, has) => circle(c + .5, r + .5, .5)
+             + (has(r, c + 1) ? `M${c + .5} ${r}h1v1h-1z` : '') + (has(r + 1, c) ? `M${c} ${r + .5}h1v1h-1z` : '') },
+  columns: { finder: 'round', mod: (r, c, has) => circle(c + .5, r + .5, .42)
+             + (has(r + 1, c) ? `M${c + .08} ${r + .5}h.84v1h-.84z` : '') },
+  links:   { finder: 'round', mod: (r, c, has) => circle(c + .5, r + .5, .42)
+             + (has(r, c + 1) ? `M${c + .5} ${r + .08}h1v.84h-1z` : '') },
+};
+
+const fx = v => +v.toFixed(3);
+function rrect(x, y, w, h, r) {
+  return `M${fx(x + r)} ${fx(y)}H${fx(x + w - r)}A${r} ${r} 0 0 1 ${fx(x + w)} ${fx(y + r)}V${fx(y + h - r)}`
+    + `A${r} ${r} 0 0 1 ${fx(x + w - r)} ${fx(y + h)}H${fx(x + r)}A${r} ${r} 0 0 1 ${fx(x)} ${fx(y + h - r)}`
+    + `V${fx(y + r)}A${r} ${r} 0 0 1 ${fx(x + r)} ${fx(y)}Z`;
+}
+function circle(cx, cy, r) {
+  return `M${fx(cx - r)} ${fx(cy)}a${r} ${r} 0 1 1 ${2 * r} 0a${r} ${r} 0 1 1 -${2 * r} 0z`;
+}
+
+// Path data in module units: modules (nonzero fill) and finder squares (evenodd fill).
+function layoutPaths(L, style) {
+  const S = STYLES[style] || STYLES.dots;
+  const dark = new Set(L.dots.map(([r, c]) => r * 1000 + c));
+  const has = (r, c) => dark.has(r * 1000 + c);
+  const mods = L.dots.map(([r, c]) => S.mod(r, c, has)).join('');
+  const finders = L.finders.map(([r, c]) => S.finder === 'sharp'
+    ? `M${c} ${r}h7v7h-7z M${c + 1} ${r + 1}h5v5h-5z M${c + 2} ${r + 2}h3v3h-3z`
+    : rrect(c, r, 7, 7, 2) + rrect(c + 1, r + 1, 5, 5, 1.4) + rrect(c + 2, r + 2, 3, 3, .9)).join('');
+  return { mods, finders };
+}
+
+// logo: null for the typographic mark, {vb, inner} for an inline vector mark,
+// or {href: dataURI} for an uploaded file.
+function layoutToSvg(L, color, logo, style) {
+  const q = 4, size = L.n + 2 * q, P = layoutPaths(L, style);
+  const o = [];
+  o.push(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size * 10}" height="${size * 10}">`);
+  o.push(`<rect width="${size}" height="${size}" fill="#ffffff"/>`);
+  o.push(`<g fill="${color}" transform="translate(${q} ${q})">`);
+  o.push(`<path d="${P.mods}"/>`);
+  o.push(`<path fill-rule="evenodd" d="${P.finders}"/>`);
+  o.push('</g>');
+  const m = 0.6, x = q + L.c0 + m, w = L.k - 2 * m;
+  if (logo && logo.vb) {
+    // Vector mark inlined so print software keeps it as paths.
+    o.push(`<svg x="${x}" y="${x}" width="${w}" height="${w}" viewBox="${logo.vb}" preserveAspectRatio="xMidYMid meet">${logo.inner}</svg>`);
+  } else if (logo) {
+    o.push(`<image href="${logo.href}" x="${x}" y="${x}" width="${w}" height="${w}" preserveAspectRatio="xMidYMid meet"/>`);
+  } else {
+    const cx = q + L.c0 + L.k / 2;
+    o.push(`<text x="${cx}" y="${cx}" text-anchor="middle" dominant-baseline="central" font-family="'Exo 2', Arial, sans-serif" font-weight="700" font-size="${w * 0.3}" textLength="${w}" lengthAdjust="spacingAndGlyphs" fill="${color}">BCDSS</text>`);
+  }
+  o.push('</svg>');
+  return o.join('');
+}
+
+const BLUE = '#07529A';
+// Chain symbol from Logo_BCDSS.svg (Logopaket 2/2020), wordmark removed.
+const CHAIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="25.80 28.30 113.70 129.90" width="455" height="520"><polygon fill="#FABB00" points="25.85,28.39 25.85,142.12 139.42,142.12 139.42,28.39 25.85,28.39 25.85,28.39 "/> <path fill="#FABB00" d="M74.97,142.13H56.17c7.78,5.98,14.66,11.27,14.66,11.27c10,7.68,24.3,5.77,31.97-4.24 c1.67-2.18,2.86-4.56,3.64-7.03h-12.6c-0.02,0.02-0.03,0.05-0.05,0.07c-3.84,5.01-11,5.95-16,2.11 C77.8,144.3,76.73,143.48,74.97,142.13L74.97,142.13L74.97,142.13z"/> <g> <g> <path fill="#FFFFFF" d="M46.51,115.1c-1.14-0.61-2.25-1.32-3.31-2.14c-2.64-2.03-4.75-4.5-6.29-7.23c-4,9.37-1.34,20.61,7.11,27.09 c0.03,0.02,0.06,0.04,0.08,0.06l0,0l11.57,8.8c0.19,0.15,0.38,0.29,0.56,0.43h18.79c-2.71-2.08-7.09-5.44-11.81-9.06l-0.01,0.01 l-12.19-9.32l0,0c-0.01-0.01-0.03-0.02-0.04-0.03C48.17,121.57,46.64,118.37,46.51,115.1L46.51,115.1L46.51,115.1z M106.45,142.13 c2.83-8.89,0.02-18.98-7.81-24.99c0,0-5.48-4.2-12.17-9.34l-0.01,0.01c-5.76-4.43-14.53-11.17-14.53-11.17l0,0 c-0.03-0.02-0.05-0.05-0.08-0.07c-7.17-5.5-16.57-6.09-24.15-2.3c0.1,2.95,1.46,5.83,3.98,7.77c0.98,0.75,2.05,1.29,3.16,1.64 c3.35-0.94,7.08-0.36,10.05,1.92c0.01,0.01,0.02,0.02,0.04,0.03l0,0l13.81,10.58h0c7.05,5.41,12.97,9.95,12.98,9.96 c4.99,3.83,5.94,10.97,2.13,15.96H106.45L106.45,142.13L106.45,142.13z"/> </g> <path fill="#00519E" d="M104.03,71.42L104.03,71.42c0.02-0.03,0.04-0.05,0.06-0.08c6.23-8.12,6.16-19.09,0.58-27.04 c-3.62,4.72-6.23,8.12-6.24,8.13c-0.56,0.73-0.99,1.51-1.32,2.32c0.78,3.24,0.15,6.79-2.04,9.63c-0.01,0.01-0.02,0.03-0.03,0.04 l0,0L71.6,94.97c0.34,0.24,0.68,0.48,1.01,0.73c0.01,0.01,3.37,2.59,8.05,6.18L104.03,71.42L104.03,71.42L104.03,71.42z M44.14,111.93c8.2,6.29,19.3,6.16,27.28,0.41c-4.29-3.29-7.3-5.6-7.3-5.6c-1.09-0.84-2.3-1.41-3.55-1.75 c-3.19,0.72-6.66,0.07-9.46-2.08c-5.01-3.84-5.95-11.01-2.11-16.02c0.02-0.03,0.05-0.05,0.07-0.08l-0.01,0l27.85-36.3l0,0 c0.01-0.01,0.02-0.03,0.03-0.04c2.28-2.97,5.74-4.5,9.21-4.46c0.43-0.69,0.88-1.37,1.39-2.03c0,0,2.58-3.37,6.18-8.05 c-9.11-3.29-19.67-0.51-25.88,7.59c-0.02,0.03-0.04,0.06-0.06,0.08l0,0L39.95,79.86l0,0c-0.01,0.01-0.02,0.02-0.03,0.03 C32.24,89.9,34.13,104.25,44.14,111.93L44.14,111.93L44.14,111.93z"/> <path fill="#FFFFFF" d="M97.61,51.71c0,0,9.92-12.91,17.9-23.32h-14.48C94.55,36.85,88.5,44.76,88.5,44.76l0,0 c-0.01,0.01-0.02,0.02-0.03,0.03c-6.21,8.09-6.16,19.01-0.63,26.96c3.63-4.73,6.25-8.14,6.25-8.15c0.58-0.76,1.02-1.57,1.36-2.42 c-0.69-3.17-0.04-6.62,2.09-9.4C97.57,51.76,97.6,51.74,97.61,51.71L97.61,51.71L97.61,51.71L97.61,51.71z M127.6,50.13l0.01,0.01 l-11.87,15.47l0,0c-0.02,0.03-0.04,0.06-0.06,0.09c-2.32,3.02-5.85,4.55-9.39,4.45c-0.4,0.64-0.83,1.28-1.3,1.89 c0,0-2.61,3.4-6.23,8.12c9.13,3.34,19.75,0.57,25.98-7.55c0.01-0.01,0.02-0.02,0.02-0.03l0,0l14.66-19.13V34.72 C136.29,38.8,131.86,44.58,127.6,50.13L127.6,50.13L127.6,50.13z"/> </g></svg>`;
+const CHAIN = { vb: '25.80 28.30 113.70 129.90', inner: CHAIN_SVG.replace(/^<svg[^>]*>|<\/svg>$/g, ''),
+  href: 'data:image/svg+xml;base64,' + btoa(CHAIN_SVG) };
+const els = {
+  url: document.getElementById('url'), urlError: document.getElementById('urlError'),
+  tile: document.getElementById('tile'), uploadRow: document.getElementById('uploadRow'),
+  logo: document.getElementById('logo'), sizeFact: document.getElementById('sizeFact'),
+  densityWarn: document.getElementById('densityWarn'), actions: document.getElementById('actions'),
+  saveSvg: document.getElementById('saveSvg'), savePng: document.getElementById('savePng'),
+  status: document.getElementById('saveStatus'),
+};
+let layout = null, logo = null, downloads = null;
+// Inside claude.ai the page saves through the downloads capability; elsewhere
+// (for example GitHub Pages) it uses an ordinary browser download.
+const inClaude = !!(window.claude && window.claude.use);
+
+function markMode() { return document.querySelector('input[name="mark"]:checked').value; }
+function styleMode() { return document.querySelector('input[name="style"]:checked').value; }
+function activeLogo() {
+  const mode = markMode();
+  return mode === 'chain' ? CHAIN : mode === 'upload' ? logo : null;
+}
+function validUrl(s) { return /^https?:\/\/\S+\.\S+/i.test(s.trim()); }
+
+function render() {
+  const u = els.url.value.trim();
+  const ok = validUrl(u);
+  els.urlError.hidden = ok || u === '';
+  els.saveSvg.disabled = els.savePng.disabled = !ok;
+  if (!ok) return;
+  layout = buildLayout(qrcode, u);
+  els.tile.innerHTML = layoutToSvg(layout, BLUE, activeLogo(), styleMode());
+  const cm = Math.max(2, (layout.n + 8) * 0.04);
+  els.sizeFact.textContent = `Print at least ${cm.toFixed(1).replace('.0', '')} cm wide.`;
+  els.densityWarn.hidden = layout.n < 57; // version 10 and up
+}
+
+function fileBase() {
+  try {
+    const p = new URL(els.url.value.trim());
+    const slug = (p.pathname.split('/').filter(Boolean).pop() || p.hostname).replace(/[^a-z0-9-]+/gi, '-').slice(0, 60);
+    return 'bcdss-qr-' + slug.toLowerCase();
+  } catch { return 'bcdss-qr'; }
+}
+
+async function toPng(L, color, mark, style, px) {
+  if (!mark) { try { await document.fonts.load('700 40px "Exo 2"'); } catch {} }
+  const q = 4, size = L.n + 2 * q, s = px / size;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = px;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, px, px);
+  ctx.save(); ctx.scale(s, s); ctx.translate(q, q); ctx.fillStyle = color;
+  const P = layoutPaths(L, style);
+  ctx.fill(new Path2D(P.mods));
+  ctx.fill(new Path2D(P.finders), 'evenodd');
+  ctx.restore();
+  const m = .6, x = (q + L.c0 + m) * s, w = (L.k - 2 * m) * s;
+  if (mark) {
+    const img = new Image();
+    img.src = mark.href;
+    await img.decode();
+    const iw = img.naturalWidth || 1, ih = img.naturalHeight || 1, f = Math.min(w / iw, w / ih);
+    ctx.drawImage(img, x + (w - iw * f) / 2, x + (w - ih * f) / 2, iw * f, ih * f);
+  } else {
+    ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    let fs = w * .3;
+    ctx.font = `700 ${fs}px "Exo 2", Arial, sans-serif`;
+    fs *= w / ctx.measureText('BCDSS').width;
+    ctx.font = `700 ${fs}px "Exo 2", Arial, sans-serif`;
+    ctx.fillText('BCDSS', x + w / 2, x + w / 2);
+  }
+  return new Promise(res => cv.toBlob(res, 'image/png'));
+}
+
+function browserSave(filename, data) {
+  const blob = data instanceof Blob ? data : new Blob([data], { type: 'image/svg+xml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+async function save(kind) {
+  if (!layout || (inClaude && !downloads)) return;
+  els.status.textContent = '';
+  try {
+    const data = kind === 'svg'
+      ? layoutToSvg(layout, BLUE, activeLogo(), styleMode())
+      : await toPng(layout, BLUE, activeLogo(), styleMode(), 2400);
+    const filename = `${fileBase()}.${kind}`;
+    if (downloads) await downloads.save({ filename, data });
+    else browserSave(filename, data);
+    els.status.textContent = kind === 'svg' ? 'SVG saved.' : 'PNG saved (2400 × 2400 px).';
+  } catch (e) {
+    const code = e && e.code;
+    if (code === 'declined') return;
+    if (code === 'rate_limited') { els.status.textContent = 'A save prompt is already open. Finish that one first.'; return; }
+    els.status.textContent = code === 'unavailable' || code === 'not_granted'
+      ? 'Downloads are not available in this view.'
+      : 'The file could not be saved. Try again, or use the other format.';
+  }
+}
+
+els.url.addEventListener('input', render);
+document.querySelectorAll('input[name="mark"]').forEach(r => r.addEventListener('change', () => {
+  els.uploadRow.hidden = markMode() !== 'upload';
+  render();
+}));
+document.querySelectorAll('input[name="style"]').forEach(r => r.addEventListener('change', render));
+els.logo.addEventListener('change', () => {
+  const f = els.logo.files[0];
+  if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { logo = { href: rd.result }; render(); };
+  rd.readAsDataURL(f);
+});
+els.saveSvg.addEventListener('click', () => save('svg'));
+els.savePng.addEventListener('click', () => save('png'));
+
+render();
+document.fonts && document.fonts.ready.then(render);
+
+if (inClaude) {
+  els.actions.hidden = true;
+  window.claude.use('downloads').then(d => {
+    downloads = d;
+    els.actions.hidden = !d;
+    if (!d) els.status.textContent = 'Downloads are not available in this view.';
+  });
+}
+</script>
+</body>
+</html>
